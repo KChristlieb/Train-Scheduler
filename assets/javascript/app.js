@@ -1,11 +1,14 @@
+$(document).ready(function(){
+
+
 var config = {
-    apiKey: "AIzaSyCZZqGEaka5ohH-Tr-dzDEMuZRd9ut1C8A",
-    authDomain: "train-time-f94f6.firebaseapp.com",
-    databaseURL: "https://train-time-f94f6.firebaseio.com",
-    projectId: "train-time-f94f6",
+    apiKey: "AIzaSyDYVe-UYRcWvBq-cEXZ4MhigpWsoOJw4Dc",
+    authDomain: "train-scheduler-75bc3.firebaseapp.com",
+    databaseURL: "https://train-scheduler-75bc3.firebaseio.com",
+    projectId: "train-scheduler-75bc3",
     storageBucket: "",
-    messagingSenderId: "861965481230",
-    appId: "1:861965481230:web:01f5c25a1e48e645fad35f"
+    messagingSenderId: "15967289931",
+    appId: "1:15967289931:web:70fd427fadc2cd5fa703ce"
   };
   // Initialize Firebase
   firebase.initializeApp(config);
@@ -38,3 +41,43 @@ var config = {
 
 
     });
+
+    // display info sent to firebase
+
+    database.ref().on("child_added", function (snapshot) {
+
+        var trainFreq = snapshot.val().freq;
+        console.log(snapshot.val().freq);
+
+        var firstTrain = snapshot.val().time;
+        var convertedFirstTrain = moment(firstTrain, "HH:mm").subtract(1, "years");
+        console.log(convertedFirstTrain);
+
+        var currentTime = moment().format("HH:mm");
+        console.log("current time: " + currentTime);
+
+        var diffTime = moment().diff(moment(convertedFirstTrain), "minutes");
+        console.log("difference in time: " + diffTime);
+
+        var timeApart = diffTime % trainFreq;
+        console.log(timeApart);
+
+        var minutesAway = trainFreq - timeApart;
+
+        var nextArrival = moment().add(minutesAway, "minutes").format("HH:mm");
+        console.log("Next train at: " + nextArrival);
+
+        $(".current-time").html("<h2> Current time: " + currentTime + "</h2>");
+
+        $("#current-schedule").append(`
+        <tr>
+            <td>${snapshot.val().name}</td>
+            <td>${snapshot.val().destination}</td>
+            <td>${snapshot.val().freq}</td>
+            <td>${nextArrival}</td>
+            <td>${minutesAway}</td>
+        </tr>
+        `)
+    });
+
+});
