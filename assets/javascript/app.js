@@ -9,3 +9,32 @@ var config = {
   };
   // Initialize Firebase
   firebase.initializeApp(config);
+
+  var database = firebase.database();
+
+    //   adding new train
+    $("#add-train").on("click", function(event){
+
+        event.preventDefault();
+
+        name = $(".train-name").val().trim();
+        destination = $(".train-destination").val().trim();
+        time = $(".train-time").val().trim();
+        freq = $(".train-freq").val().trim();
+
+        var newTrain = {
+            name: name,
+            destination: destination,
+            time: time,
+            freq: freq
+        }
+
+        database.ref().push(newTrain);
+
+        $(".train-name").val("");
+        $(".train-destination").val("");
+        $(".train-time").val("");
+        $(".train-freq").val("");
+
+
+    });
