@@ -6,3 +6,13 @@ body {
 h1,h2 {
     color: #65727A;
 }
+
+th {
+    color: #ffffff;
+}
+
+.container {
+    background-color: rgba(0,0,0,0.8);
+    color: #ffffff;
+}
+
